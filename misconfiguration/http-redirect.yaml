@@ -1,0 +1,24 @@
+id: http-redirect
+
+info:
+  name: HTTP redirect
+  author: Carlin Scott
+  severity: medium
+  description: The HTTP site does not redirect to HTTPS in a secure manner, leaving users open to sniffing or MITM attacks.
+
+requests:
+  - method: GET
+    redirects: false
+    path:
+      - http://{{Host}}
+    matchers-condition: or
+    matchers:
+      - type: status
+        status:
+          - 301
+        negative: true
+      - type: word
+        part: header
+        words:
+          - "Location: https://{{Host}}"
+        negative: true
